@@ -1,0 +1,157 @@
+** Testando criar o projeto, de forma que a imagem Docker funcione, para isso:
+
+1 - vou utilizar somente variáveis de ambiente tanto na máquina local (Mac) quanto no servidor,
+
+
+
+
+
+
+
+
+
+
+
+COMANDOS DART:
+
+dart create -t server-shelf apimissoes
+
+build_runner
+dart pub run build_runner watch
+dart pub run build_runner watch --delete-conflicting-outputs
+
+COMANDOS FVM:
+fvm global stable
+fvm releases
+fvm list
+
+COMANDOS DOCKER:
+
+
+
+COMANDOS BANCO DE DADOS:
+
+docker-compose up
+
+create database bdmissoes;
+use bdmissoes;
+
+CREATE TABLE IF NOT EXISTS usuario (
+  id INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(200) NOT NULL,
+  email VARCHAR(200) NOT NULL,
+  senha VARCHAR(200) NOT NULL,
+  PRIMARY KEY (id))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS produto (
+  id INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(255) NOT NULL,
+  descricao TEXT NOT NULL,
+  preco DECIMAL(10,2) NOT NULL,
+  imagem TEXT NULL,
+  PRIMARY KEY (id))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS pedido (
+  id INT NOT NULL AUTO_INCREMENT,
+  usuario_id INT NOT NULL,
+  id_transacao TEXT NULL,
+  cpf_cliente VARCHAR(45) NULL,
+  endereco_entrega TEXT NOT NULL,
+  status_pedido VARCHAR(20) NOT NULL DEFAULT 'pendente',
+  PRIMARY KEY (id),
+  INDEX fk_pedido_usuario_idx (usuario_id ASC) VISIBLE,
+  CONSTRAINT fk_pedido_usuario
+    FOREIGN KEY (usuario_id)
+    REFERENCES usuario (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS pedido_item (
+  id INT NOT NULL AUTO_INCREMENT,
+  quantidade VARCHAR(45) NOT NULL,
+  pedido_id INT NOT NULL,
+  produto_id INT NOT NULL,
+  PRIMARY KEY (id),
+  INDEX fk_pedido_produto_pedido1_idx (pedido_id ASC) VISIBLE,
+  INDEX fk_pedido_produto_produto1_idx (produto_id ASC) VISIBLE,
+  CONSTRAINT fk_pedido_produto_pedido1
+    FOREIGN KEY (pedido_id)
+    REFERENCES pedido (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_pedido_produto_produto1
+    FOREIGN KEY (produto_id)
+    REFERENCES produto (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+INSERT INTO produto(id, nome, descricao, preco, imagem)
+VALUES (null, 'X-Tudão + Suco', '', 12.99, '/xtudo_suco.jpeg');
+
+INSERT INTO produto(id, nome, descricao, preco, imagem)
+VALUES (null, 'Misto Quente', 'Pão, presunto, muçarela, Orégano', 6.99, '/xtudo_suco.jpeg');
+
+INSERT INTO produto(id, nome, descricao, preco, imagem)
+VALUES (null, 'X-Quente', 'Pão, Hambúrger (Tradicional 56g), Muçarela e Tomate', 10.99, '/xtudo_suco.jpeg');
+
+INSERT INTO produto(id, nome, descricao, preco, imagem)
+VALUES (null, 'X-Salada',
+        'Pão, Hambúrguer (Tradicional 56g), Presunto, Muçarela, Ovo, Alface, Tomate, Milho e Batata Palha.', 11.99,
+        '/xtudo_suco.jpeg');
+
+INSERT INTO produto(id, nome, descricao, preco, imagem)
+VALUES (null, 'X-Tudo',
+        'Pão, Hambúrguer (Tradicional 56g), Presunto, Muçarela, Salsicha, Bacon, Calabresa, Ovo, Catupiry, Alface, Tomate, Milho e Batata Palha.',
+        15.99, '/xtudo_suco.jpeg');
+
+
+LINKS
+https://app.gerencianet.com.br/home
+https://www.cloudns.net/main/
+https://certbot.eff.org/
+https://github.com/rodrigorahman/vakinha_burger_api
+https://base64.guru/converter/decode/image
+
+DNS
+apimissoes.cloudns.nz
+141.148.49.151
+
+
+VARIÁVEIS DE AMBIENTE [ MAC ]:
+
+echo 'export DATABASE_HOST=localhost' >> ~/.zshrc
+echo 'export DATABASE_PORT=3306' >> ~/.zshrc
+echo 'export DATABASE_USER=root' >> ~/.zshrc
+echo 'export DATABASE_PASSWORD=missoes' >> ~/.zshrc
+echo 'export DATABASE_NAME=bdmissoes' >> ~/.zshrc
+echo 'export GERENCIANET_CLIENT_ID=Client_Id_8a71a590d3badc50b9c78bd7d1aec445eb9ddb60' >> ~/.zshrc
+echo 'export GERENCIANET_CLIENT_SECRET=Client_Secret_701aed3161bf08b0e9a292928f057188b4cb0f5e' >> ~/.zshrc
+echo 'export GERENCIANET_URL=https://api-pix.gerencianet.com.br' >> ~/.zshrc
+echo 'export GERENCIANET_CERTIFICADO_CRT=certificates/prod/projeto_missoes_api.crt.pem' >> ~/.zshrc
+echo 'export GERENCIANET_CERTIFICADO_KEY=certificates/prod/projeto_missoes_api.key.pem' >> ~/.zshrc
+
+echo 'export GERENCIANET_CHAVE_PIX=0636117e-271c-4096-9c5a-16362d1b38f4' >> ~/.zshrc
+echo 'export GERENCIANET_URL_WEBHOOK=https://projetomissoes.cloudns.nz/gerencianet/webhook' >> ~/.zshrc
+
+source ~/.zshrc
+
+
+VARIÁVEIS DE AMBIENTE [ LINUX ]:
+
+echo 'export DATABASE_HOST=localhost' >> ~/.bashrc
+echo 'export DATABASE_PORT=3306' >> ~/.bashrc
+echo 'export DATABASE_USER=root' >> ~/.bashrc
+echo 'export DATABASE_PASSWORD=missoes' >> ~/.bashrc
+echo 'export DATABASE_NAME=bdmissoes' >> ~/.bashrc
+echo 'export GERENCIANET_CLIENT_ID=Client_Id_8a71a590d3badc50b9c78bd7d1aec445eb9ddb60' >> ~/.bashrc
+echo 'export GERENCIANET_CLIENT_SECRET=Client_Secret_701aed3161bf08b0e9a292928f057188b4cb0f5e' >> ~/.bashrc
+echo 'export GERENCIANET_URL=https://api-pix.gerencianet.com.br' >> ~/.bashrc
+echo 'export GERENCIANET_CERTIFICADO_CRT=certificates/prod/projeto_missoes_api.crt.pem' >> ~/.bashrc
+echo 'export GERENCIANET_CERTIFICADO_KEY=certificates/prod/projeto_missoes_api.key.pem' >> ~/.bashrc
+
+echo 'export GERENCIANET_CHAVE_PIX=0636117e-271c-4096-9c5a-16362d1b38f4' >> ~/.bashrc
+echo 'export GERENCIANET_URL_WEBHOOK=https://projetomissoes.cloudns.nz/gerencianet/webhook' >> ~/.bashrc
