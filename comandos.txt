@@ -123,7 +123,7 @@ apimissoes.cloudns.nz
 
 VARIÁVEIS DE AMBIENTE [ MAC ]:
 
-echo 'export DATABASE_HOST=localhost' >> ~/.zshrc
+echo 'export DATABASE_HOST=192.168.1.4' >> ~/.zshrc
 echo 'export DATABASE_PORT=3306' >> ~/.zshrc
 echo 'export DATABASE_USER=root' >> ~/.zshrc
 echo 'export DATABASE_PASSWORD=missoes' >> ~/.zshrc
