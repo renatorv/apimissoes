@@ -2,9 +2,44 @@ import 'package:apimissoes/app/entities/user.dart';
 import 'package:mysql1/mysql1.dart';
 import '../core/database/database.dart';
 import '../core/exceptions/email_already_registered.dart';
+import '../core/exceptions/user_not_found_exception.dart';
 import '../core/helpers/cripty_helper.dart';
 
 class UserRepository {
+  Future<User> login(String email, String password) async {
+    MySqlConnection? conn;
+    try {
+      conn = await Database().openConnection();
+      final result = await conn.query(
+        ''' 
+          select * from usuario 
+          where email = ?
+          and senha = ?
+        ''',
+        [email, CriptyHelper.generatedSha256Hash(password)],
+      );
+
+      if (result.isEmpty) {
+        throw UserNotFoundException();
+      }
+
+      final userData = result.first;
+
+      return User(
+        id: userData['id'],
+        name: userData['nome'],
+        email: userData['email'],
+        password: '',
+      );
+    } on MySqlException catch (e, s) {
+      print(e);
+      print(s);
+      throw Exception('Erro ao realizar login!');
+    } finally {
+      await conn?.close();
+    }
+  }
+
   Future<void> save(User user) async {
     MySqlConnection? conn;
     try {
@@ -39,9 +74,6 @@ class UserRepository {
   }
 }
 
-// import 'package:mysql1/mysql1.dart';
-// import 'package:projeto_missoes_api/app/core/database/database.dart';
-// import 'package:projeto_missoes_api/app/core/helpers/cripty_helper.dart';
 
 // import '../core/exceptions/email_already_registered.dart';
 // import '../core/exceptions/user_not_found_exception.dart';

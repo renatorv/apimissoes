@@ -11,3 +11,4 @@ certificates/
 
 mysql_data/
 mysql_data
+.DS_Store

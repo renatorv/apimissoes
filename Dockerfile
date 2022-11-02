@@ -1,5 +1,5 @@
 # docker build -t renatorv/apimissoes .
-# docker container run -p 8080:8080 --name app_missoes --env-file .env -d renatorv/apimissoes
+# docker container run -p 8080:8080 --name apimissoes -d renatorv/apimissoes
 # sobe a imagem para o Docker hub como privado => docker push renatorv/apimissoes:latest
 
 ##############################################################################################
