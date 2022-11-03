@@ -144,7 +144,3 @@ class AuthController {
 
 //   Router get router => _$AuthControllerRouter(this);
 // }
-
-Aula 2 concluida.
-Imagem ok
-https://www.youtube.com/watch?v=tR60-scg98Q&list=PLEXr-WZRgPjw5zVjR5YP3mB7cI9pfWmd7&index=3

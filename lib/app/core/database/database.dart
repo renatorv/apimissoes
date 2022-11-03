@@ -4,7 +4,7 @@ class Database {
   Future<MySqlConnection> openConnection() async {
     return MySqlConnection.connect(
       ConnectionSettings(
-        host: '192.168.1.4',
+        host: '141.148.49.151',
         port: 3306,
         user: 'root',
         password: 'missoes',
